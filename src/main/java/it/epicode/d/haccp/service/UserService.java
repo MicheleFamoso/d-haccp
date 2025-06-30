@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,7 @@ public class UserService {
         user.setNome(userDto.getNome());
         user.setCognome(userDto.getCognome());
         user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(Role.USER);
 
@@ -58,5 +61,9 @@ public class UserService {
         User userDaCancellare = getUser(id);
 
         userRepository.delete(userDaCancellare);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

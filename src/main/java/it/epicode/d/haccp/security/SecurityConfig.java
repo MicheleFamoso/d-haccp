@@ -31,6 +31,7 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(http->http.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.cors(Customizer.withDefaults());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/auth/**").permitAll());
+        httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/aziende/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers(HttpMethod.POST).permitAll());
         httpSecurity.authorizeHttpRequests(http->http.anyRequest().denyAll());
         return httpSecurity.build();
