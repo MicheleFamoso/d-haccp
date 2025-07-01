@@ -100,4 +100,10 @@ public class TemperaturaController {
 
         return temperaturaGiornalieraService.findByDateAndConformitaFrigo(frigo, conformita, start, end);
     }
+    @GetMapping()
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<TemperaturaGiornaliera> findByTemperatura(@RequestParam("temperatura") int temperatura){
+        return temperaturaGiornalieraService.findByTemperatura(temperatura);
+    }
+
 }

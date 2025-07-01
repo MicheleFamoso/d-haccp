@@ -19,4 +19,5 @@ public class TemperaturaGiornaliera {
     private int frigo;
     @Enumerated(EnumType.STRING)
     private Conformita conformita;
+    private int temperatura;
 }

@@ -24,6 +24,7 @@ public class TemperaturaGiornalieraService {
         TemperaturaGiornaliera temperaturaGiornaliera = new TemperaturaGiornaliera();
         temperaturaGiornaliera.setFrigo(dto.getFrigo());
         temperaturaGiornaliera.setData(dto.getData());
+        temperaturaGiornaliera.setTemperatura(dto.getTemperatura());
         temperaturaGiornaliera.setConformita(dto.getConformita());
         return temperaturaGiornalieraRepository.save(temperaturaGiornaliera);
     }
@@ -40,6 +41,7 @@ public class TemperaturaGiornalieraService {
         TemperaturaGiornaliera temperaturaGiornaliera = getTemperaturaById(id);
         temperaturaGiornaliera.setFrigo(dto.getFrigo());
         temperaturaGiornaliera.setData(dto.getData());
+        temperaturaGiornaliera.setTemperatura(dto.getTemperatura());
         temperaturaGiornaliera.setConformita(dto.getConformita());
         return temperaturaGiornalieraRepository.save(temperaturaGiornaliera);
     }
@@ -72,6 +74,10 @@ public class TemperaturaGiornalieraService {
 
     public List<TemperaturaGiornaliera> findByDateAndConformitaFrigo( int frigo,Conformita conformita ,LocalDate start,LocalDate end){
         return temperaturaGiornalieraRepository.findByFrigoAndConformitaAndDataBetween(frigo, conformita, start, end);
+    }
+
+    public List<TemperaturaGiornaliera> findByTemperatura(int temperatura){
+        return temperaturaGiornalieraRepository.findByTemperatura(temperatura);
     }
 
 
