@@ -10,6 +10,7 @@ import it.epicode.d.haccp.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +41,8 @@ public class AziendaController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Azienda> getAzienda(){
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Azienda> getAziende(){
         return aziendaService.getAllAziende();
     }
 
@@ -59,6 +61,7 @@ public class AziendaController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteAzienda(@PathVariable int id) throws NotFoundException {
         aziendaService.deleteAzienda(id);
     }
