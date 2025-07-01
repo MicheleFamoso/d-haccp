@@ -33,6 +33,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/auth/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/aziende/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/pulizie/**").permitAll());
+        httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/temperature/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers(HttpMethod.POST).permitAll());
         httpSecurity.authorizeHttpRequests(http->http.anyRequest().denyAll());
         return httpSecurity.build();

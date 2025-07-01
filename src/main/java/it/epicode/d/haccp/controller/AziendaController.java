@@ -3,6 +3,7 @@ package it.epicode.d.haccp.controller;
 import it.epicode.d.haccp.dto.AziendaDto;
 import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.Azienda;
+import it.epicode.d.haccp.model.TemperaturaGiornaliera;
 import it.epicode.d.haccp.model.User;
 import it.epicode.d.haccp.repository.AziendaRepository;
 import it.epicode.d.haccp.service.AziendaService;
@@ -30,6 +31,7 @@ public class AziendaController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Azienda createAzienda(@RequestBody @Validated AziendaDto aziendaDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new ValidationException(bindingResult.getAllErrors().stream().
@@ -41,7 +43,6 @@ public class AziendaController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseStatus(HttpStatus.CREATED)
     public List<Azienda> getAziende(){
         return aziendaService.getAllAziende();
     }
@@ -61,8 +62,10 @@ public class AziendaController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.GONE)
     public void deleteAzienda(@PathVariable int id) throws NotFoundException {
         aziendaService.deleteAzienda(id);
     }
+
+
 }

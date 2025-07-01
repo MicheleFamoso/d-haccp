@@ -47,6 +47,8 @@ public class OperazioniPuliziaController {
     public OperazioniPulizia getPuliziaById(@PathVariable int id) throws NotFoundException {
         return operazioniRepositoryService.getOperazioniPuliziaById(id);
     }
+
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public OperazioniPulizia updatePulizia( @PathVariable int id, @RequestBody @Validated OperazioniPuliziaDto operazioniPuliziaDto) throws NotFoundException {
@@ -56,7 +58,7 @@ public class OperazioniPuliziaController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.GONE)
     public void deletePulizia(@PathVariable int id) throws NotFoundException {
         operazioniRepositoryService.deletePulizia(id);
     }
