@@ -63,13 +63,13 @@ public class TemperaturaController {
         return temperaturaGiornalieraService.findByFrigo(frigo);
     }
 
-    @GetMapping("/data")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> getTemperatureByData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         return temperaturaGiornalieraService.findByData(data);
     }
 
-    @GetMapping("/range")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> getTemperatureByRange(
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
@@ -78,14 +78,14 @@ public class TemperaturaController {
     }
 
 
-    @GetMapping("/conformita")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> getTemperatureByConformita(@RequestParam("conformita") Conformita conformita){
         return temperaturaGiornalieraService.findByConformita(conformita);
     }
 
 
-    @GetMapping("/{frigo}/range")
+    @GetMapping("/{frigo}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> findByDateAndFrigo( @PathVariable int frigo,@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
                                                             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end){
@@ -93,7 +93,7 @@ public class TemperaturaController {
 
     }
 
-    @GetMapping("/{frigo}/range/conformita")
+    @GetMapping("/{frigo}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> findByAll(@PathVariable int frigo,@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
                                                   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,@RequestParam("conformita") Conformita conformita){
