@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -32,13 +33,13 @@ public class AziendaController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Azienda createAzienda(@RequestBody @Validated AziendaDto aziendaDto, BindingResult bindingResult) {
+    public Azienda createAzienda(@RequestBody @Validated AziendaDto aziendaDto, BindingResult bindingResult, Principal principal) throws NotFoundException {
         if(bindingResult.hasErrors()){
             throw new ValidationException(bindingResult.getAllErrors().stream().
                     map(objectError -> objectError.getDefaultMessage()).
                     reduce("", (s,e)->s+e));
         }
-        return aziendaService.createAzienda(aziendaDto);
+        return aziendaService.createAzienda(aziendaDto, principal.getName());
     }
 
     @GetMapping

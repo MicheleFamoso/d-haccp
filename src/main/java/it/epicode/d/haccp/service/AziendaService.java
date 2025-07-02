@@ -6,6 +6,7 @@ import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.Azienda;
 import it.epicode.d.haccp.model.User;
 import it.epicode.d.haccp.repository.AziendaRepository;
+import it.epicode.d.haccp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,10 @@ public class AziendaService {
 
     @Autowired
     private AziendaRepository aziendaRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-
-    public Azienda createAzienda(AziendaDto dto){
+    public Azienda createAzienda(AziendaDto dto,String adminUsername) throws NotFoundException {
         Azienda azienda = new Azienda();
         azienda.setDenominazioneAziendale(dto.getDenominazioneAziendale());
         azienda.setRagioneSociale(dto.getRagioneSociale());
@@ -27,9 +29,15 @@ public class AziendaService {
         azienda.setPartitaIva(dto.getPartitaIva());
         azienda.setTelefono(dto.getTelefono());
         azienda.setEmail(dto.getEmail());
+        Azienda salvata= aziendaRepository.save(azienda);
+        User admin = userRepository.findByUsername(adminUsername)
+                .orElseThrow(() -> new NotFoundException("Utente admin non trovato"));
+        admin.setAzienda(salvata);
+        userRepository.save(admin);
+
+        return salvata;
 
 
-        return aziendaRepository.save(azienda);
     }
 
 

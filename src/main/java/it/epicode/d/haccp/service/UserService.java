@@ -34,6 +34,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User creaUtente(UserDto dto, String adminUsername) throws NotFoundException {
+        User admin = userRepository.findByUsername(adminUsername)
+                .orElseThrow(() -> new NotFoundException("Admin non trovato"));
+
+        User nuovoUtente = new User();
+        nuovoUtente.setNome(dto.getNome());
+        nuovoUtente.setCognome(dto.getCognome());
+        nuovoUtente.setUsername(dto.getUsername());
+        nuovoUtente.setEmail(dto.getEmail());
+        nuovoUtente.setPassword(passwordEncoder.encode(dto.getPassword()));
+       nuovoUtente.setRole(Role.USER);
+        nuovoUtente.setAzienda(admin.getAzienda());
+
+
+        return userRepository.save(nuovoUtente);
+    }
+
     public List<User> getAllUser(){
 
         return userRepository.findAll();

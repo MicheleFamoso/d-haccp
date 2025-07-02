@@ -26,6 +26,10 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToOne
+    @JoinColumn(name = "ristorante_id")
+    private Azienda azienda;
+
 
 
     @Override

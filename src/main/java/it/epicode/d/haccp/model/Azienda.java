@@ -1,7 +1,10 @@
 package it.epicode.d.haccp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -16,6 +19,9 @@ public class Azienda {
     private String partitaIva;
     private String telefono;
     private String email;
+    @OneToMany(mappedBy = "azienda")
+    @JsonIgnore
+    private List<User> utenti;
 
 
 }
