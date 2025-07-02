@@ -41,7 +41,7 @@ public class InfestantiController {
     }
 
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Infestanti> getAllInfestanti(){
         return infestantiService.getAllInfestanti();
@@ -59,12 +59,12 @@ public class InfestantiController {
         infestantiService.deleteInfestante(id);
     }
 
-    @GetMapping()
+    @GetMapping("/data")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Infestanti> getInfestantiByData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         return infestantiService.findInfestantiByData(data);
     }
-    @GetMapping()
+    @GetMapping("/range")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Infestanti> getInfestantiByRange(
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,

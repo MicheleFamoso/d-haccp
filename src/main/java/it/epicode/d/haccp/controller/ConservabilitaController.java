@@ -2,6 +2,8 @@ package it.epicode.d.haccp.controller;
 
 
 import it.epicode.d.haccp.dto.ConservabilitaDto;
+import it.epicode.d.haccp.enumeration.TipoConservazione;
+import it.epicode.d.haccp.enumeration.TipoProdotto;
 import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.Conservabilita;
 
@@ -35,9 +37,9 @@ public class ConservabilitaController {
         return conservabilitaService.createConservabilita(conservabilitaDto);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> getAllInfestanti(){
+    public List<Conservabilita> getAllConservabilita(){
         return conservabilitaService.getAllConservabilita();
     }
 
@@ -52,6 +54,42 @@ public class ConservabilitaController {
     public Conservabilita updateConservabilita(@PathVariable int id,@RequestBody @Validated ConservabilitaDto conservabilitaDto) throws NotFoundException {
         return conservabilitaService.updateConservabilita(conservabilitaDto,id);
     }
-    
+
+    @GetMapping("/prodotto/tipo")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByTipoProdotto(@RequestParam("tipo") TipoProdotto tipoProdotto){
+        return conservabilitaService.findByTipoProdotto(tipoProdotto);
+    }
+
+    @GetMapping("/conservazione/tipo")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByTipoConservazione(@RequestParam("tipo") TipoConservazione tipoConservazione){
+        return conservabilitaService.findByTipoConservazione(tipoConservazione);
+    }
+
+    @GetMapping("/conservazione/giorni")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByGiorniConservazione(@RequestParam("giorni") int giorni){
+        return conservabilitaService.findByGiorniConservazione(giorni);
+    }
+
+    @GetMapping("/conservazione/range")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByRangeGiorniConservazione(@RequestParam("min") int min,
+                                                               @RequestParam("max") int max){
+        return conservabilitaService.findByRangeGiorni(min, max);
+    }
+    @GetMapping("/prodotto-e-conservazione")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByTipoProdottoEConservazione(@RequestParam("tipoProdotto") TipoProdotto tipoProdotto,
+                                                                 @RequestParam("tipoConservazione") TipoConservazione tipoConservazione){
+        return conservabilitaService.findByTipoProdottoEConservazione(tipoConservazione, tipoProdotto);
+    }
+    @GetMapping("/prodotto")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Conservabilita> findByNomeProdotto(@RequestParam("nome") String nome){
+        return conservabilitaService.findByProdotto(nome);
+    }
+
 
 }
