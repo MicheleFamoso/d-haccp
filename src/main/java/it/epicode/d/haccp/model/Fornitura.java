@@ -26,4 +26,7 @@ public class Fornitura {
     private Conformita conformita;
 
     private String lotto;
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 }

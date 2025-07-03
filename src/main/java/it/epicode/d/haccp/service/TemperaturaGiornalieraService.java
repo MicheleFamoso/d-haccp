@@ -5,7 +5,9 @@ import it.epicode.d.haccp.dto.TemperaturaGiornalieraDto;
 import it.epicode.d.haccp.enumeration.Conformita;
 import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.TemperaturaGiornaliera;
+import it.epicode.d.haccp.model.Azienda;
 import it.epicode.d.haccp.repository.TemperaturaGiornalieraRepository;
+import it.epicode.d.haccp.repository.AziendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +20,22 @@ public class TemperaturaGiornalieraService {
     @Autowired
     private TemperaturaGiornalieraRepository temperaturaGiornalieraRepository;
 
+    @Autowired
+    private AziendaRepository aziendaRepository;
 
 
-    public TemperaturaGiornaliera createTemperatura(TemperaturaGiornalieraDto dto){
+
+    public TemperaturaGiornaliera createTemperatura(TemperaturaGiornalieraDto dto, int aziendaId) throws NotFoundException {
+        Azienda azienda = aziendaRepository.findById(aziendaId)
+                .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
+
         TemperaturaGiornaliera temperaturaGiornaliera = new TemperaturaGiornaliera();
         temperaturaGiornaliera.setFrigo(dto.getFrigo());
         temperaturaGiornaliera.setData(dto.getData());
         temperaturaGiornaliera.setTemperatura(dto.getTemperatura());
         temperaturaGiornaliera.setConformita(dto.getConformita());
+        temperaturaGiornaliera.setAzienda(azienda);
+
         return temperaturaGiornalieraRepository.save(temperaturaGiornaliera);
     }
 
@@ -51,33 +61,33 @@ public class TemperaturaGiornalieraService {
         temperaturaGiornalieraRepository.delete(temperaturaGiornaliera);
     }
 
-    public List<TemperaturaGiornaliera> findByFrigo(int frigo){
-        return temperaturaGiornalieraRepository.findByFrigo(frigo);
+    public List<TemperaturaGiornaliera> findByFrigo(int frigo, int aziendaId){
+        return temperaturaGiornalieraRepository.findByFrigoAndAziendaId(frigo, aziendaId);
     }
 
-    public List<TemperaturaGiornaliera> findByData(LocalDate data){
-        return temperaturaGiornalieraRepository.findByData(data);
+    public List<TemperaturaGiornaliera> findByData(LocalDate data, int aziendaId){
+        return temperaturaGiornalieraRepository.findByDataAndAziendaId(data, aziendaId);
     }
 
-    public List<TemperaturaGiornaliera> findByConformita(Conformita conformita){
-        return temperaturaGiornalieraRepository.findByConformita(conformita);
+    public List<TemperaturaGiornaliera> findByConformita(Conformita conformita, int aziendaId){
+        return temperaturaGiornalieraRepository.findByConformitaAndAziendaId(conformita, aziendaId);
     }
 
 
-    public List<TemperaturaGiornaliera> findByDate(LocalDate start,LocalDate end){
-        return temperaturaGiornalieraRepository.findByDataBetween(start, end);
+    public List<TemperaturaGiornaliera> findByDate(LocalDate start,LocalDate end, int aziendaId){
+        return temperaturaGiornalieraRepository.findByDataBetweenAndAziendaId(start, end, aziendaId);
     }
 
-    public List<TemperaturaGiornaliera> findByDateAndFrigo(int frigo ,LocalDate start,LocalDate end){
-        return temperaturaGiornalieraRepository.findByFrigoAndDataBetween(frigo, start, end);
+    public List<TemperaturaGiornaliera> findByDateAndFrigo(int frigo ,LocalDate start,LocalDate end, int aziendaId){
+        return temperaturaGiornalieraRepository.findByFrigoAndDataBetweenAndAziendaId(frigo, start, end, aziendaId);
     }
 
-    public List<TemperaturaGiornaliera> findByDateAndConformitaFrigo( int frigo,Conformita conformita ,LocalDate start,LocalDate end){
-        return temperaturaGiornalieraRepository.findByFrigoAndConformitaAndDataBetween(frigo, conformita, start, end);
+    public List<TemperaturaGiornaliera> findByDateAndConformitaFrigo( int frigo,Conformita conformita ,LocalDate start,LocalDate end, int aziendaId){
+        return temperaturaGiornalieraRepository.findByFrigoAndConformitaAndDataBetweenAndAziendaId(frigo, conformita, start, end, aziendaId);
     }
 
-    public List<TemperaturaGiornaliera> findByTemperatura(int temperatura){
-        return temperaturaGiornalieraRepository.findByTemperatura(temperatura);
+    public List<TemperaturaGiornaliera> findByTemperatura(int temperatura, int aziendaId){
+        return temperaturaGiornalieraRepository.findByTemperaturaAndAziendaId(temperatura, aziendaId);
     }
 
 

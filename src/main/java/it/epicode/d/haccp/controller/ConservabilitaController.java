@@ -8,6 +8,7 @@ import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.Conservabilita;
 
 import it.epicode.d.haccp.service.ConservabilitaService;
+import it.epicode.d.haccp.service.UserService;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,79 +17,110 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/conservabilita")
 public class ConservabilitaController {
+
     @Autowired
     private ConservabilitaService conservabilitaService;
 
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Conservabilita saveConservabilita(@RequestBody @Validated ConservabilitaDto conservabilitaDto, BindingResult bindingResult){
+    public Conservabilita saveConservabilita(@RequestBody @Validated ConservabilitaDto conservabilitaDto, BindingResult bindingResult, Principal principal) throws NotFoundException {
         if(bindingResult.hasErrors()){
             throw new ValidationException(bindingResult.getAllErrors().stream().
                     map(objectError -> objectError.getDefaultMessage()).
                     reduce("", (s,e)->s+e));
         }
-        return conservabilitaService.createConservabilita(conservabilitaDto);
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.createConservabilita(conservabilitaDto, aziendaId);
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> getAllConservabilita(){
-        return conservabilitaService.getAllConservabilita();
+    public List<Conservabilita> getAllConservabilita(Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.getAllConservabilita(aziendaId);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public void deleteInfestanti( @PathVariable int id) throws NotFoundException {
+    public void deleteConservabilita(@PathVariable int id) throws NotFoundException {
         conservabilitaService.deleteConservabilita(id);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public Conservabilita updateConservabilita(@PathVariable int id,@RequestBody @Validated ConservabilitaDto conservabilitaDto) throws NotFoundException {
-        return conservabilitaService.updateConservabilita(conservabilitaDto,id);
+    public Conservabilita updateConservabilita(@PathVariable int id, @RequestBody @Validated ConservabilitaDto conservabilitaDto) throws NotFoundException {
+        return conservabilitaService.updateConservabilita(conservabilitaDto, id);
     }
 
     @GetMapping("/prodotto/tipo")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> findByTipoProdotto(@RequestParam("tipo") TipoProdotto tipoProdotto){
-        return conservabilitaService.findByTipoProdotto(tipoProdotto);
+    public List<Conservabilita> findByTipoProdotto(@RequestParam("tipo") TipoProdotto tipoProdotto, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByTipoProdotto(tipoProdotto, aziendaId);
     }
 
     @GetMapping("/conservazione/tipo")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> findByTipoConservazione(@RequestParam("tipo") TipoConservazione tipoConservazione){
-        return conservabilitaService.findByTipoConservazione(tipoConservazione);
+    public List<Conservabilita> findByTipoConservazione(@RequestParam("tipo") TipoConservazione tipoConservazione, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByTipoConservazione(tipoConservazione, aziendaId);
     }
 
     @GetMapping("/conservazione/giorni")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> findByGiorniConservazione(@RequestParam("giorni") int giorni){
-        return conservabilitaService.findByGiorniConservazione(giorni);
+    public List<Conservabilita> findByGiorniConservazione(@RequestParam("giorni") int giorni, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByGiorniConservazione(giorni, aziendaId);
     }
 
     @GetMapping("/conservazione/range")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Conservabilita> findByRangeGiorniConservazione(@RequestParam("min") int min,
-                                                               @RequestParam("max") int max){
-        return conservabilitaService.findByRangeGiorni(min, max);
+                                                              @RequestParam("max") int max, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByRangeGiorni(min, max, aziendaId);
     }
+
     @GetMapping("/prodotto-e-conservazione")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Conservabilita> findByTipoProdottoEConservazione(@RequestParam("tipoProdotto") TipoProdotto tipoProdotto,
-                                                                 @RequestParam("tipoConservazione") TipoConservazione tipoConservazione){
-        return conservabilitaService.findByTipoProdottoEConservazione(tipoConservazione, tipoProdotto);
+                                                                @RequestParam("tipoConservazione") TipoConservazione tipoConservazione,
+                                                                Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByTipoProdottoEConservazione(tipoConservazione, tipoProdotto, aziendaId);
     }
+
     @GetMapping("/prodotto")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<Conservabilita> findByNomeProdotto(@RequestParam("nome") String nome){
-        return conservabilitaService.findByProdotto(nome);
+    public List<Conservabilita> findByNomeProdotto(@RequestParam("nome") String nome, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return conservabilitaService.findByProdotto(nome, aziendaId);
     }
 
 

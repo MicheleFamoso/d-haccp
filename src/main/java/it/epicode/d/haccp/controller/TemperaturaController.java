@@ -6,6 +6,7 @@ import it.epicode.d.haccp.enumeration.Conformita;
 import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.TemperaturaGiornaliera;
 import it.epicode.d.haccp.service.TemperaturaGiornalieraService;
+import it.epicode.d.haccp.service.UserService;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,16 +26,24 @@ public class TemperaturaController {
     @Autowired
     private TemperaturaGiornalieraService temperaturaGiornalieraService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public TemperaturaGiornaliera createTemperatura(@RequestBody @Validated TemperaturaGiornalieraDto dto, BindingResult bindingResult){
+    public TemperaturaGiornaliera createTemperatura(@RequestBody @Validated TemperaturaGiornalieraDto dto, BindingResult bindingResult, Principal principal) throws NotFoundException {
         if(bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult.getAllErrors().stream().
-                    map(objectError -> objectError.getDefaultMessage()).
-                    reduce("", (s,e)->s+e));
+            throw new ValidationException(bindingResult.getAllErrors().stream()
+                    .map(objectError -> objectError.getDefaultMessage())
+                    .reduce("", (s,e)->s+e));
         }
-        return temperaturaGiornalieraService.createTemperatura(dto);
+
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+
+        return temperaturaGiornalieraService.createTemperatura(dto, aziendaId);
     }
 
 
@@ -59,51 +69,72 @@ public class TemperaturaController {
 
     @GetMapping("/frigoriferi/{frigo}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<TemperaturaGiornaliera> getTemperatureByFrigo(@PathVariable int frigo){
-        return temperaturaGiornalieraService.findByFrigo(frigo);
+    public List<TemperaturaGiornaliera> getTemperatureByFrigo(@PathVariable int frigo, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByFrigo(frigo, aziendaId);
     }
 
     @GetMapping("/data")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<TemperaturaGiornaliera> getTemperatureByData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
-        return temperaturaGiornalieraService.findByData(data);
+    public List<TemperaturaGiornaliera> getTemperatureByData(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByData(data, aziendaId);
     }
 
     @GetMapping("/range")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> getTemperatureByRange(
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
-        return temperaturaGiornalieraService.findByDate(start, end);
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByDate(start, end, aziendaId);
     }
 
 
     @GetMapping("/conformita")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<TemperaturaGiornaliera> getTemperatureByConformita(@RequestParam("conformita") Conformita conformita){
-        return temperaturaGiornalieraService.findByConformita(conformita);
+    public List<TemperaturaGiornaliera> getTemperatureByConformita(@RequestParam("conformita") Conformita conformita, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByConformita(conformita, aziendaId);
     }
 
 
     @GetMapping("/{frigo}/range")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> findByDateAndFrigo( @PathVariable int frigo,@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-                                                            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end){
-        return temperaturaGiornalieraService.findByDateAndFrigo(frigo, start, end);
+                                                            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByDateAndFrigo(frigo, start, end, aziendaId);
 
     }
 
     @GetMapping("/{frigo}/range/conformita")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<TemperaturaGiornaliera> findByAll(@PathVariable int frigo,@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-                                                  @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,@RequestParam("conformita") Conformita conformita){
+                                                  @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,@RequestParam("conformita") Conformita conformita, Principal principal) throws NotFoundException {
 
-        return temperaturaGiornalieraService.findByDateAndConformitaFrigo(frigo, conformita, start, end);
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByDateAndConformitaFrigo(frigo, conformita, start, end, aziendaId);
     }
     @GetMapping("/valore")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<TemperaturaGiornaliera> findByTemperatura(@RequestParam("temperatura") int temperatura){
-        return temperaturaGiornalieraService.findByTemperatura(temperatura);
+    public List<TemperaturaGiornaliera> findByTemperatura(@RequestParam("temperatura") int temperatura, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return temperaturaGiornalieraService.findByTemperatura(temperatura, aziendaId);
     }
 
 }

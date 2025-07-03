@@ -10,12 +10,14 @@ import java.util.List;
 
 public interface FornituraRepository extends JpaRepository<Fornitura,Integer> {
 
-    List<Fornitura> findByData(LocalDate data);
-    List<Fornitura> findByProdottoContainingIgnoreCase(String prodotto);
 
-    @Query("SELECT f FROM Fornitura f WHERE LOWER(f.fornitore.nomeFornitore) LIKE LOWER(CONCAT('%', :nomeFornitore, '%'))")
-    List<Fornitura> findByNomeFornitoreContainingIgnoreCase(@Param("nomeFornitore") String nomeFornitore);
+    List<Fornitura> findByDataAndAziendaId(LocalDate data, int aziendaId);
 
+    List<Fornitura> findByProdottoContainingIgnoreCaseAndAziendaId(String prodotto, int aziendaId);
 
-    List<Fornitura> findByDataBetween(LocalDate start, LocalDate end);
+    @Query("SELECT f FROM Fornitura f WHERE LOWER(f.fornitore.nomeFornitore) LIKE LOWER(CONCAT('%', :nomeFornitore, '%')) AND f.azienda.id = :aziendaId")
+    List<Fornitura> findByNomeFornitoreContainingIgnoreCaseAndAziendaId(@Param("nomeFornitore") String nomeFornitore, @Param("aziendaId") int aziendaId);
+
+    List<Fornitura> findByDataBetweenAndAziendaId(LocalDate start, LocalDate end, int aziendaId);
+    List<Fornitura> findByAziendaId(int aziendaId);
 }

@@ -4,7 +4,9 @@ package it.epicode.d.haccp.service;
 import it.epicode.d.haccp.dto.InfestantiDto;
 import it.epicode.d.haccp.enumeration.Conformita;
 import it.epicode.d.haccp.exception.NotFoundException;
+import it.epicode.d.haccp.model.Azienda;
 import it.epicode.d.haccp.model.Infestanti;
+import it.epicode.d.haccp.repository.AziendaRepository;
 import it.epicode.d.haccp.repository.InfestantiRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,11 @@ import java.util.List;
 public class InfestantiService {
     @Autowired
     private InfestantiRepository infestantiRepository;
+    @Autowired
+    private AziendaRepository aziendaRepository;
 
-    public Infestanti saveInfestanti(InfestantiDto dto){
+    public Infestanti saveInfestanti(InfestantiDto dto,int aziendaId) throws NotFoundException {
+        Azienda azienda = aziendaRepository.findById(aziendaId).orElseThrow(()-> new NotFoundException("Azienda non trovata"));
         Infestanti infestanti = new Infestanti();
         infestanti.setData(dto.getData());
         infestanti.setRoditori(dto.getRoditori());
@@ -27,8 +32,8 @@ public class InfestantiService {
         return infestantiRepository.save(infestanti);
     }
 
-    public List<Infestanti>getAllInfestanti(){
-        return infestantiRepository.findAll();
+    public List<Infestanti>getAllInfestanti(int aziendaId){
+        return infestantiRepository.findByAziendaId(aziendaId);
     }
     public Infestanti getInfestantiById(int id) throws NotFoundException {
         return infestantiRepository.findById(id).orElseThrow(()->new NotFoundException("Infestante non trovato"));
@@ -46,30 +51,31 @@ public class InfestantiService {
         infestantiRepository.delete(infestanti);
     }
 
-    public List<Infestanti> findInfestantiByData(LocalDate data){
-        return infestantiRepository.findByData(data);
+    public List<Infestanti> findInfestantiByData(LocalDate data, int aziendaId) {
+        return infestantiRepository.findByDataAndAziendaId(data, aziendaId);
     }
 
-    public List<Infestanti> findInfestantiByDate(LocalDate start,LocalDate end){
-        return infestantiRepository.findByDataBetween(start, end);
+    public List<Infestanti> findInfestantiByDate(LocalDate start, LocalDate end, int aziendaId) {
+        return infestantiRepository.findByDataBetweenAndAziendaId(start, end, aziendaId);
     }
 
-    public List<Infestanti> findByRoditori(Conformita conformita){
-        return infestantiRepository.findByRoditori(conformita);
+    public List<Infestanti> findByRoditori(Conformita conformita, int aziendaId) {
+        return infestantiRepository.findByRoditoriAndAziendaId(conformita, aziendaId);
     }
 
-    public List<Infestanti> findByInsettiStriscianti(Conformita conformita){
-        return infestantiRepository.findByInsettiStriscianti(conformita);
+    public List<Infestanti> findByInsettiStriscianti(Conformita conformita, int aziendaId) {
+        return infestantiRepository.findByInsettiStrisciantiAndAziendaId(conformita, aziendaId);
     }
 
-    public List<Infestanti> findByInsettiVolanti(Conformita conformita){
-        return infestantiRepository.findByInsettiVolanti(conformita);
+    public List<Infestanti> findByInsettiVolanti(Conformita conformita, int aziendaId) {
+        return infestantiRepository.findByInsettiVolantiAndAziendaId(conformita, aziendaId);
     }
 
-    public List<Infestanti> findByConformi(){
-        return infestantiRepository.findControlliConformi();
+    public List<Infestanti> findByConformi(int aziendaId) {
+        return infestantiRepository.findControlliConformiByAziendaId(aziendaId);
     }
-    public List<Infestanti> findByNonConformi(){
-        return infestantiRepository.findControlliNonConformi();
+
+    public List<Infestanti> findByNonConformi(int aziendaId) {
+        return infestantiRepository.findControlliNonConformiByAziendaId(aziendaId);
     }
 }

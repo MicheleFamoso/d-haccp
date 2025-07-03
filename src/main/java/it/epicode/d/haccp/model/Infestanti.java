@@ -21,4 +21,7 @@ public class Infestanti {
     @Enumerated(EnumType.STRING)
     private Conformita insettiVolanti;
 
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 }

@@ -1,9 +1,6 @@
 package it.epicode.d.haccp.model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
@@ -21,6 +18,8 @@ public class Fornitore {
 
     @ElementCollection
     private List<String> prodottiForniti;
-
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 
 }

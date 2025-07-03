@@ -20,4 +20,7 @@ public class TemperaturaGiornaliera {
     @Enumerated(EnumType.STRING)
     private Conformita conformita;
     private int temperatura;
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 }

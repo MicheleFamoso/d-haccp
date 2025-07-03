@@ -20,6 +20,9 @@ public class Conservabilita {
     private int giorniMassimaConservazione;
    private String note;
 
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 
 
 }

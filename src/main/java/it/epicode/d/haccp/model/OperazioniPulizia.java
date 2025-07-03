@@ -1,9 +1,7 @@
 package it.epicode.d.haccp.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -16,5 +14,9 @@ public class OperazioniPulizia {
     private String frequenza;
     private String detergente;
     private String attrezzatureUtilizzate;
+
+    @ManyToOne
+    @JoinColumn(name = "azienda_id")
+    private Azienda azienda;
 
 }
