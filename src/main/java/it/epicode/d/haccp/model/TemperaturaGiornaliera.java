@@ -4,11 +4,13 @@ package it.epicode.d.haccp.model;
 import it.epicode.d.haccp.enumeration.Conformita;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
+
 public class TemperaturaGiornaliera {
 
     @Id

@@ -9,13 +9,7 @@ import java.util.List;
 
 public interface TemperaturaGiornalieraRepository extends JpaRepository<TemperaturaGiornaliera,Integer> {
 
-    List<TemperaturaGiornaliera> findByFrigo(int frigo);
-    List<TemperaturaGiornaliera> findByTemperatura(int temperatura);
-    List<TemperaturaGiornaliera> findByData(LocalDate data);
-    List<TemperaturaGiornaliera> findByConformita(Conformita conformita);
-    List<TemperaturaGiornaliera> findByDataBetween(LocalDate start, LocalDate end);
-    List<TemperaturaGiornaliera> findByFrigoAndDataBetween(int frigo, LocalDate start, LocalDate end);
-    List<TemperaturaGiornaliera> findByFrigoAndConformitaAndDataBetween(int frigo, Conformita conformita, LocalDate start, LocalDate end);
+
 
     List<TemperaturaGiornaliera> findByDataBetweenAndAziendaId(LocalDate start, LocalDate end, int aziendaId);
     List<TemperaturaGiornaliera> findByDataAndAziendaId(LocalDate data, int aziendaId);
