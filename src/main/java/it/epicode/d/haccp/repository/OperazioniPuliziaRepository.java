@@ -8,9 +8,7 @@ public interface OperazioniPuliziaRepository extends JpaRepository<OperazioniPul
 
     List<OperazioniPulizia> findByAziendaId(Integer aziendaId);
 
-    List<OperazioniPulizia> findByDataAndAziendaId(String data, Integer aziendaId);
 
-    List<OperazioniPulizia> findByDataBetweenAndAziendaId(String start, String end, Integer aziendaId);
 
     List<OperazioniPulizia> findByOggettoAndAziendaId(String oggetto, Integer aziendaId);
 
