@@ -17,6 +17,6 @@ public class FornitoreDto {
     private String telefono;
     @NotEmpty(message = "Il campo email non puo essere vuoto")
     private String email;
-    @NotNull(message = "Il campo prodotti non puo essere vuoto")
+    @NotEmpty(message = "Devi specificare almeno un prodotto")
     private List<String> prodottiForniti;
 }

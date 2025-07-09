@@ -56,6 +56,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getAllUserByAdmin(String adminUsername) throws NotFoundException {
+        User admin = userRepository.findByUsername(adminUsername)
+                .orElseThrow(() -> new NotFoundException("Admin non trovato"));
+        return userRepository.findByAzienda(admin.getAzienda());
+    }
+
     public User getUser(int id) throws NotFoundException {
         return userRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("User con id " + id + " non trovato"));

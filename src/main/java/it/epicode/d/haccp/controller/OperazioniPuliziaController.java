@@ -71,21 +71,16 @@ public class OperazioniPuliziaController {
 
 
 
-    @GetMapping("/oggetto")
+    @GetMapping("/cerca")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<OperazioniPulizia> findByOggetto(@RequestParam String oggetto, Principal principal) throws NotFoundException {
-        int aziendaId = userService.findByUsername(principal.getName())
-                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
-                .getAzienda().getId();
-        return operazioniRepositoryService.findByOggettoAndAziendaId(oggetto, aziendaId);
-    }
+    public List<OperazioniPulizia> cercaPulizie(
+            @RequestParam String query,
+            Principal principal) throws NotFoundException {
 
-    @GetMapping("/frequenza")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public List<OperazioniPulizia> findByFrequenza(@RequestParam String frequenza, Principal principal) throws NotFoundException {
         int aziendaId = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new NotFoundException("Utente non trovato"))
                 .getAzienda().getId();
-        return operazioniRepositoryService.findByFrequenzaAndAziendaId(frequenza, aziendaId);
+
+        return operazioniRepositoryService.cercaInTuttiICampi(query, aziendaId);
     }
 }

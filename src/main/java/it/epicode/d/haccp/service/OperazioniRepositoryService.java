@@ -70,4 +70,10 @@ public class OperazioniRepositoryService {
         return operazioniPuliziaRepository.findByFrequenzaAndAziendaId(frequenza, aziendaId);
     }
 
+    public List<OperazioniPulizia> findByOggettoAndFrequenzaAndAziendaId(String oggetto, String frequenza, int aziendaId) {
+        return operazioniPuliziaRepository.findByOggettoAndFrequenzaAndAziendaId(oggetto, frequenza, aziendaId);
+    }
+    public List<OperazioniPulizia> cercaInTuttiICampi(String query, int aziendaId) {
+        return operazioniPuliziaRepository.cercaInOggettoFrequenzaDetergente(query, aziendaId);
+    }
 }

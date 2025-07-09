@@ -28,6 +28,7 @@ public class JwtTool {
         return Jwts.builder().issuedAt(new Date()).
                 expiration(new Date(System.currentTimeMillis()+durata)).
                 subject(String.valueOf(user.getId())).
+                claim("role", user.getRole()).
                 signWith(Keys.hmacShaKeyFor(chiaveSegreta.getBytes())).
                 compact();
     }

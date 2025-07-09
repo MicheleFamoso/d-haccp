@@ -80,4 +80,17 @@ public class FornitoreController {
         return fornitoreService.findByNomeFornitore(fornitore, aziendaId);
     }
 
+
+    @GetMapping("/cerca")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Fornitore> cercaFornitori(@RequestParam("query") String query, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return fornitoreService.cercaPerNomeOFornitura(query, aziendaId);
+    }
+
+
 }
+
+
