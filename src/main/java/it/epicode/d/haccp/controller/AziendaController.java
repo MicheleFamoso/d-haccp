@@ -48,10 +48,12 @@ public class AziendaController {
         return aziendaService.getAllAziende();
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Azienda getAziendaById(@PathVariable int id) throws NotFoundException {
-        return aziendaService.getAzienda(id);
+    @GetMapping("/mia")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Azienda getMiaAzienda(Principal principal) throws NotFoundException {
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"));
+        return user.getAzienda();
     }
 
 
