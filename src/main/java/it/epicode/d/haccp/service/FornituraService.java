@@ -1,6 +1,7 @@
 package it.epicode.d.haccp.service;
 
 import it.epicode.d.haccp.dto.FornituraDto;
+import it.epicode.d.haccp.enumeration.Conformita;
 import it.epicode.d.haccp.exception.NotFoundException;
 import it.epicode.d.haccp.model.Azienda;
 import it.epicode.d.haccp.model.Fornitore;
@@ -86,5 +87,15 @@ public class FornituraService {
     }
     public List<Fornitura> cercaPerProdottoOFornitore(String query, int aziendaId) {
         return fornituraRepository.cercaPerProdottoOFornitore(query, aziendaId);
+    }
+
+    public List<Fornitura> findByConformita(String conformitaString, int aziendaId) {
+        Conformita conformitaEnum;
+        try {
+            conformitaEnum = Conformita.valueOf(conformitaString.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Valore conformità non valido: " + conformitaString);
+        }
+        return fornituraRepository.findByConformitaAndAziendaId(conformitaEnum, aziendaId);
     }
 }

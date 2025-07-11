@@ -1,5 +1,6 @@
 package it.epicode.d.haccp.repository;
 
+import it.epicode.d.haccp.enumeration.Conformita;
 import it.epicode.d.haccp.model.Fornitura;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +25,11 @@ public interface FornituraRepository extends JpaRepository<Fornitura,Integer> {
     @Query("SELECT f FROM Fornitura f WHERE f.azienda.id = :aziendaId AND (" +
            "LOWER(f.fornitore.nomeFornitore) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
            "LOWER(f.prodotto) LIKE LOWER(CONCAT('%', :query, '%')))")
+
     List<Fornitura> cercaPerProdottoOFornitore(@Param("query") String query, @Param("aziendaId") int aziendaId);
+    List<Fornitura> findByConformitaAndAziendaId(Conformita conformita, int aziendaId);
+
 }
+
+
+
