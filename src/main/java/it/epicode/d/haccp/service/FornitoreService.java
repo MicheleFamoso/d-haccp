@@ -71,3 +71,5 @@ public class FornitoreService {
         return fornitoreRepository.cercaPerNomeOFornitura(query, aziendaId);
     }
 }
+
+

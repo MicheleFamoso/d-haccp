@@ -110,4 +110,13 @@ public class FornituraController {
                 .getAzienda().getId();
         return service.findByNomeFornitoreContainingIgnoreCase(nomeFornitore, aziendaId);
     }
+
+    @GetMapping("/cerca")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<Fornitura> cercaForniture(@RequestParam("query") String query, Principal principal) throws NotFoundException {
+        int aziendaId = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"))
+                .getAzienda().getId();
+        return service.cercaPerProdottoOFornitore(query, aziendaId);
+    }
 }

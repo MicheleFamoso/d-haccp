@@ -20,4 +20,9 @@ public interface FornituraRepository extends JpaRepository<Fornitura,Integer> {
 
     List<Fornitura> findByDataBetweenAndAziendaId(LocalDate start, LocalDate end, int aziendaId);
     List<Fornitura> findByAziendaId(int aziendaId);
+
+    @Query("SELECT f FROM Fornitura f WHERE f.azienda.id = :aziendaId AND (" +
+           "LOWER(f.fornitore.nomeFornitore) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           "LOWER(f.prodotto) LIKE LOWER(CONCAT('%', :query, '%')))")
+    List<Fornitura> cercaPerProdottoOFornitore(@Param("query") String query, @Param("aziendaId") int aziendaId);
 }

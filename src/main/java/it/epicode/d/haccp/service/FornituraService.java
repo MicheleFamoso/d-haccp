@@ -84,4 +84,7 @@ public class FornituraService {
     public List<Fornitura> findByNomeFornitoreContainingIgnoreCase(String nomeFornitore, int aziendaId) {
         return fornituraRepository.findByNomeFornitoreContainingIgnoreCaseAndAziendaId(nomeFornitore, aziendaId);
     }
+    public List<Fornitura> cercaPerProdottoOFornitore(String query, int aziendaId) {
+        return fornituraRepository.cercaPerProdottoOFornitore(query, aziendaId);
+    }
 }
