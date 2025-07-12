@@ -35,7 +35,7 @@ public class CalendarioService {
                     "Temperatura",
                     "Frigo " + t.getFrigo(),
                     String.valueOf(t.getTemperatura()),
-                    t.getConformita().name()
+                    t.getConformita()
             ));
         }
 
@@ -47,7 +47,7 @@ public class CalendarioService {
                     "Infestanti",
                     "Controllo roditori/insetti",
                     null,
-                    (i.getRoditori() != null) ? i.getRoditori().name() : null
+                    (i.getRoditori() != null) ? i.getRoditori() : null
             ));
         }
 
@@ -59,7 +59,7 @@ public class CalendarioService {
                     "Fornitura",
                     f.getProdotto(),
                     f.getLotto(),
-                    f.getConformita().name()
+                    f.getConformita()
             ));
         }
 

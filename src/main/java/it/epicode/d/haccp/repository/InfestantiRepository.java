@@ -28,4 +28,10 @@ public interface InfestantiRepository extends JpaRepository<Infestanti,Integer> 
     List<Infestanti> findByInsettiVolantiAndAziendaId(Conformita conformita, int aziendaId);
 
     List<Infestanti> findByAziendaId(int aziendaId);
+
+    @Query("SELECT i FROM Infestanti i WHERE i.roditori = 'CONFORME' AND i.insettiStriscianti = 'CONFORME' AND i.insettiVolanti = 'CONFORME' AND i.azienda.id = :aziendaId")
+    List<Infestanti> findAllConformiByAziendaId(@Param("aziendaId") int aziendaId);
+
+    @Query("SELECT i FROM Infestanti i WHERE i.roditori = 'NON_CONFORME' AND i.insettiStriscianti = 'NON_CONFORME' AND i.insettiVolanti = 'NON_CONFORME' AND i.azienda.id = :aziendaId")
+    List<Infestanti> findAllNonConformiByAziendaId(@Param("aziendaId") int aziendaId);
 }

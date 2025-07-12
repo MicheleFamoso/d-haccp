@@ -29,6 +29,7 @@ public class InfestantiService {
         infestanti.setRoditori(dto.getRoditori());
         infestanti.setInsettiStriscianti(dto.getInsettiStriscianti());
         infestanti.setInsettiVolanti(dto.getInsettiVolanti());
+        infestanti.setAzienda(azienda);
         return infestantiRepository.save(infestanti);
     }
 
@@ -77,5 +78,13 @@ public class InfestantiService {
 
     public List<Infestanti> findByNonConformi(int aziendaId) {
         return infestantiRepository.findControlliNonConformiByAziendaId(aziendaId);
+    }
+
+    public List<Infestanti> findAllConformiByAziendaId(int aziendaId) {
+        return infestantiRepository.findAllConformiByAziendaId(aziendaId);
+    }
+
+    public List<Infestanti> findAllNonConformiByAziendaId(int aziendaId) {
+        return infestantiRepository.findAllNonConformiByAziendaId(aziendaId);
     }
 }

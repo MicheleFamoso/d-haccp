@@ -2,13 +2,17 @@ package it.epicode.d.haccp.dto;
 
 
 import it.epicode.d.haccp.enumeration.Conformita;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CalendarioDto {
 
     private int id;
@@ -18,7 +22,4 @@ public class CalendarioDto {
     private String valore;
     private Conformita conformita;
 
-
-    public CalendarioDto(int id, LocalDate data, String temperatura, String s, String s1, String name) {
-    }
 }

@@ -39,6 +39,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/fornitori/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/forniture/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/admin/**").permitAll());
+        httpSecurity.authorizeHttpRequests(http->http.requestMatchers("/controlli/**").permitAll());
         httpSecurity.authorizeHttpRequests(http->http.requestMatchers(HttpMethod.POST).permitAll());
         httpSecurity.authorizeHttpRequests(http->http.anyRequest().denyAll());
         return httpSecurity.build();
