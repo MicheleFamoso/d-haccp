@@ -39,7 +39,17 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers(Principal principal) throws NotFoundException {
-        return userService.getAllUserByAdmin(principal.getName());
+        int currentUserId = userService.getUserByUsername(principal.getName()).getId();
+        return userService.getAllUserByAdmin(principal.getName())
+                .stream()
+                .filter(user -> user.getId() != currentUserId)
+                .toList();
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public User getCurrentUser(Principal principal) throws NotFoundException {
+        return userService.getUserByUsername(principal.getName());
     }
 
     @PutMapping("/{id}")

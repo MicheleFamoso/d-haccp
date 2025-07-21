@@ -89,4 +89,10 @@ public class UserService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User getUserByUsername(String username) throws NotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Utente con username " + username + " non trovato"));
+    }
+
 }
