@@ -22,7 +22,7 @@
 - **Java 17**
 - **Spring Boot**
 - **Spring Data JPA**
-- **Spring Security (se implementata)**
+- **Spring Security**
 - **PostgreSQL**
 - **Maven**
 - **RESTful API**
