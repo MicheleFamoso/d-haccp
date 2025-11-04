@@ -64,7 +64,7 @@ public class OperazioniPuliziaController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @ResponseStatus(HttpStatus.GONE)
+
     public void deletePulizia(@PathVariable int id) throws NotFoundException {
         operazioniRepositoryService.deletePulizia(id);
     }
