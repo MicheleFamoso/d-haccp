@@ -33,7 +33,7 @@ public class CalendarioService {
                     t.getId(),
                     t.getData(),
                     "Temperatura",
-                    "Frigo " + t.getFrigo(),
+                   ""+ t.getFrigo(),
                     String.valueOf(t.getTemperatura()),
                     t.getConformita()
             ));
@@ -58,7 +58,7 @@ public class CalendarioService {
                     f.getData(),
                     "Fornitura",
                     f.getProdotto(),
-                    f.getLotto(),
+                    f.getFornitore().getNomeFornitore(),
                     f.getConformita()
             ));
         }
