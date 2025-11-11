@@ -32,7 +32,8 @@
 
 🔗 Collegamento al Frontend
 Il frontend dell'applicazione si trova qui:
-📁 https://github.com/MicheleFamoso/dhaccpFrontEnd
+📁 V2: https://github.com/MicheleFamoso/d-haccp-v2
+📁 V1: https://github.com/MicheleFamoso/dhaccpFrontEnd
 
 📄 Licenza
 Questo progetto è a scopo dimostrativo e didattico. Può essere riutilizzato o modificato liberamente per usi non commerciali.
